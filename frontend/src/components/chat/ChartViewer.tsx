@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { BarChart3, Maximize2, ExternalLink, Download, Loader2 } from 'lucide-react';
+import { BarChart3, Maximize2, ExternalLink, Loader2 } from 'lucide-react';
 import { Dialog } from '../ui/dialog';
+import { buildBackendUrl } from '../../api/config';
 
 interface ChartViewerProps {
   chartPath: string;
@@ -18,7 +19,7 @@ export const ChartViewer: React.FC<ChartViewerProps> = ({
   // e.g. "F:\DA_Project\SQL_Agent\artifacts\charts\bar_graph_11.html" -> "bar_graph_11.html"
   const normalizedPath = chartPath.replace(/\\/g, '/');
   const filename = normalizedPath.split('/').pop() || '';
-  const chartUrl = `/charts/${filename}`;
+  const chartUrl = buildBackendUrl(`/charts/${filename}`);
 
   return (
     <>

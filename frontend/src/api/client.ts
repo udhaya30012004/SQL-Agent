@@ -1,7 +1,6 @@
 import axios, { InternalAxiosRequestConfig } from 'axios';
 import { TokenResponse } from '../types/auth';
-
-const API_BASE_URL = '/api/v1';
+import { API_BASE_URL } from './config';
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
