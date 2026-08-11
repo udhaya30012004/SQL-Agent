@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     
     # CORS Origins (frontend URLs allowed to connect)
     # E.g., JSON list: '["http://localhost:3000", "http://localhost:5173"]'
-    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = []
+    BACKEND_CORS_ORIGINS: List[str] = []
 
     @field_validator("BACKEND_CORS_ORIGINS", mode="before")
     @classmethod
