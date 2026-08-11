@@ -11,7 +11,6 @@ RUN apt-get update \
 
 COPY requirements.txt ./requirements.txt
 COPY api/requirements.txt ./api-requirements.txt
-
 RUN pip install --no-cache-dir -r requirements.txt \
     && pip install --no-cache-dir -r api-requirements.txt
 
@@ -24,7 +23,6 @@ RUN mkdir -p /app/data /app/SQL_Agent/artifacts/charts
 
 EXPOSE 8000
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
-    CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3).read()"
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 CMD python -c "import os, urllib.request; port=os.getenv('PORT', '8000'); urllib.request.urlopen(f'http://127.0.0.1:{port}/health', timeout=3).read()"
 
 CMD ["sh", "-c", "uvicorn api.app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
