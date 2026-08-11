@@ -1,0 +1,727 @@
+============================================
+
+TABLE NAME
+film_actor
+
+DESCRIPTION
+Stores records for film_actor. Available columns include actor_id, film_id, last_update.
+
+COLUMNS
+actor_id INTEGER
+film_id INTEGER
+last_update TIMESTAMP
+
+PRIMARY KEY
+actor_id, film_id
+
+FOREIGN KEYS
+actor_id -> actor(actor_id)
+film_id -> film(film_id)
+
+DIRECTLY CONNECTED TABLES 1 HOP
+
+actor
+film
+
+SECOND LEVEL TABLES 2 HOP
+
+film_category
+inventory
+language
+
+THIRD LEVEL TABLES 3 HOP
+
+category
+rental
+store
+
+GRAPH SUMMARY
+
+film_actor
++-- actor
++-- film
+
+============================================
+
+
+============================================
+
+TABLE NAME
+address
+
+DESCRIPTION
+Stores records for address. Available columns include address_id, address, address2, district, city_id, postal_code, phone, last_update.
+
+COLUMNS
+address_id INTEGER
+address TEXT
+address2 TEXT
+district TEXT
+city_id INTEGER
+postal_code TEXT
+phone TEXT
+last_update TIMESTAMP
+
+PRIMARY KEY
+address_id
+
+FOREIGN KEYS
+city_id -> city(city_id)
+
+DIRECTLY CONNECTED TABLES 1 HOP
+
+city
+customer
+staff
+store
+
+SECOND LEVEL TABLES 2 HOP
+
+country
+inventory
+rental
+
+THIRD LEVEL TABLES 3 HOP
+
+film
+
+GRAPH SUMMARY
+
+address
++-- city
++-- customer
++-- staff
++-- store
+
+============================================
+
+
+============================================
+
+TABLE NAME
+city
+
+DESCRIPTION
+Stores records for city. Available columns include city_id, city, country_id, last_update.
+
+COLUMNS
+city_id INTEGER
+city TEXT
+country_id INTEGER
+last_update TIMESTAMP
+
+PRIMARY KEY
+city_id
+
+FOREIGN KEYS
+country_id -> country(country_id)
+
+DIRECTLY CONNECTED TABLES 1 HOP
+
+address
+country
+
+SECOND LEVEL TABLES 2 HOP
+
+customer
+staff
+store
+
+THIRD LEVEL TABLES 3 HOP
+
+inventory
+rental
+
+GRAPH SUMMARY
+
+city
++-- address
++-- country
+
+============================================
+
+
+============================================
+
+TABLE NAME
+actor
+
+DESCRIPTION
+Stores records for actor. Available columns include actor_id, first_name, last_name, last_update.
+
+COLUMNS
+actor_id INTEGER
+first_name TEXT
+last_name TEXT
+last_update TIMESTAMP
+
+PRIMARY KEY
+actor_id
+
+FOREIGN KEYS
+None
+
+DIRECTLY CONNECTED TABLES 1 HOP
+
+film_actor
+
+SECOND LEVEL TABLES 2 HOP
+
+film
+
+THIRD LEVEL TABLES 3 HOP
+
+film_category
+inventory
+language
+
+GRAPH SUMMARY
+
+actor
++-- film_actor
+
+============================================
+
+
+============================================
+
+TABLE NAME
+category
+
+DESCRIPTION
+Stores records for category. Available columns include category_id, name, last_update.
+
+COLUMNS
+category_id INTEGER
+name TEXT
+last_update TIMESTAMP
+
+PRIMARY KEY
+category_id
+
+FOREIGN KEYS
+None
+
+DIRECTLY CONNECTED TABLES 1 HOP
+
+film_category
+
+SECOND LEVEL TABLES 2 HOP
+
+film
+
+THIRD LEVEL TABLES 3 HOP
+
+film_actor
+inventory
+language
+
+GRAPH SUMMARY
+
+category
++-- film_category
+
+============================================
+
+
+============================================
+
+TABLE NAME
+country
+
+DESCRIPTION
+Stores records for country. Available columns include country_id, country, last_update.
+
+COLUMNS
+country_id INTEGER
+country TEXT
+last_update TIMESTAMP
+
+PRIMARY KEY
+country_id
+
+FOREIGN KEYS
+None
+
+DIRECTLY CONNECTED TABLES 1 HOP
+
+city
+
+SECOND LEVEL TABLES 2 HOP
+
+address
+
+THIRD LEVEL TABLES 3 HOP
+
+customer
+staff
+store
+
+GRAPH SUMMARY
+
+country
++-- city
+
+============================================
+
+
+============================================
+
+TABLE NAME
+customer
+
+DESCRIPTION
+Stores records for customer. Available columns include customer_id, store_id, first_name, last_name, email, address_id, activebool, create_date, last_update, active.
+
+COLUMNS
+customer_id INTEGER
+store_id INTEGER
+first_name TEXT
+last_name TEXT
+email TEXT
+address_id INTEGER
+activebool BOOLEAN
+create_date DATE
+last_update TIMESTAMP
+active INTEGER
+
+PRIMARY KEY
+customer_id
+
+FOREIGN KEYS
+address_id -> address(address_id)
+store_id -> store(store_id)
+
+DIRECTLY CONNECTED TABLES 1 HOP
+
+address
+rental
+store
+
+SECOND LEVEL TABLES 2 HOP
+
+city
+inventory
+staff
+
+THIRD LEVEL TABLES 3 HOP
+
+country
+film
+
+GRAPH SUMMARY
+
+customer
++-- address
++-- rental
++-- store
+
+============================================
+
+
+============================================
+
+TABLE NAME
+film
+
+DESCRIPTION
+Stores records for film. Available columns include film_id, title, description, release_year, language_id, original_language_id, rental_duration, rental_rate, length, replacement_cost, rating, last_update, special_features, fulltext.
+
+COLUMNS
+film_id INTEGER
+title TEXT
+description TEXT
+release_year DOMAIN
+language_id INTEGER
+original_language_id INTEGER
+rental_duration SMALLINT
+rental_rate NUMERIC(4, 2)
+length SMALLINT
+replacement_cost NUMERIC(5, 2)
+rating VARCHAR(5)
+last_update TIMESTAMP
+special_features ARRAY
+fulltext TSVECTOR
+
+PRIMARY KEY
+film_id
+
+FOREIGN KEYS
+language_id -> language(language_id)
+original_language_id -> language(language_id)
+
+DIRECTLY CONNECTED TABLES 1 HOP
+
+film_actor
+film_category
+inventory
+language
+
+SECOND LEVEL TABLES 2 HOP
+
+actor
+category
+rental
+store
+
+THIRD LEVEL TABLES 3 HOP
+
+address
+customer
+staff
+
+GRAPH SUMMARY
+
+film
++-- film_actor
++-- film_category
++-- inventory
++-- language
+
+============================================
+
+
+============================================
+
+TABLE NAME
+film_category
+
+DESCRIPTION
+Stores records for film_category. Available columns include film_id, category_id, last_update.
+
+COLUMNS
+film_id INTEGER
+category_id INTEGER
+last_update TIMESTAMP
+
+PRIMARY KEY
+film_id, category_id
+
+FOREIGN KEYS
+category_id -> category(category_id)
+film_id -> film(film_id)
+
+DIRECTLY CONNECTED TABLES 1 HOP
+
+category
+film
+
+SECOND LEVEL TABLES 2 HOP
+
+film_actor
+inventory
+language
+
+THIRD LEVEL TABLES 3 HOP
+
+actor
+rental
+store
+
+GRAPH SUMMARY
+
+film_category
++-- category
++-- film
+
+============================================
+
+
+============================================
+
+TABLE NAME
+inventory
+
+DESCRIPTION
+Stores records for inventory. Available columns include inventory_id, film_id, store_id, last_update.
+
+COLUMNS
+inventory_id INTEGER
+film_id INTEGER
+store_id INTEGER
+last_update TIMESTAMP
+
+PRIMARY KEY
+inventory_id
+
+FOREIGN KEYS
+film_id -> film(film_id)
+store_id -> store(store_id)
+
+DIRECTLY CONNECTED TABLES 1 HOP
+
+film
+rental
+store
+
+SECOND LEVEL TABLES 2 HOP
+
+address
+customer
+film_actor
+film_category
+language
+staff
+
+THIRD LEVEL TABLES 3 HOP
+
+actor
+category
+city
+
+GRAPH SUMMARY
+
+inventory
++-- film
++-- rental
++-- store
+
+============================================
+
+
+============================================
+
+TABLE NAME
+language
+
+DESCRIPTION
+Stores records for language. Available columns include language_id, name, last_update.
+
+COLUMNS
+language_id INTEGER
+name CHAR(20)
+last_update TIMESTAMP
+
+PRIMARY KEY
+language_id
+
+FOREIGN KEYS
+None
+
+DIRECTLY CONNECTED TABLES 1 HOP
+
+film
+
+SECOND LEVEL TABLES 2 HOP
+
+film_actor
+film_category
+inventory
+
+THIRD LEVEL TABLES 3 HOP
+
+actor
+category
+rental
+store
+
+GRAPH SUMMARY
+
+language
++-- film
+
+============================================
+
+
+============================================
+
+TABLE NAME
+rental
+
+DESCRIPTION
+Stores records for rental. Available columns include rental_id, rental_date, inventory_id, customer_id, return_date, staff_id, last_update.
+
+COLUMNS
+rental_id INTEGER
+rental_date TIMESTAMP
+inventory_id INTEGER
+customer_id INTEGER
+return_date TIMESTAMP
+staff_id INTEGER
+last_update TIMESTAMP
+
+PRIMARY KEY
+rental_id
+
+FOREIGN KEYS
+customer_id -> customer(customer_id)
+inventory_id -> inventory(inventory_id)
+staff_id -> staff(staff_id)
+
+DIRECTLY CONNECTED TABLES 1 HOP
+
+customer
+inventory
+staff
+
+SECOND LEVEL TABLES 2 HOP
+
+address
+film
+store
+
+THIRD LEVEL TABLES 3 HOP
+
+city
+film_actor
+film_category
+language
+
+GRAPH SUMMARY
+
+rental
++-- customer
++-- inventory
++-- staff
+
+============================================
+
+
+============================================
+
+TABLE NAME
+staff
+
+DESCRIPTION
+Stores records for staff. Available columns include staff_id, first_name, last_name, address_id, email, store_id, active, username, password, last_update, picture.
+
+COLUMNS
+staff_id INTEGER
+first_name TEXT
+last_name TEXT
+address_id INTEGER
+email TEXT
+store_id INTEGER
+active BOOLEAN
+username TEXT
+password TEXT
+last_update TIMESTAMP
+picture BYTEA
+
+PRIMARY KEY
+staff_id
+
+FOREIGN KEYS
+address_id -> address(address_id)
+store_id -> store(store_id)
+
+DIRECTLY CONNECTED TABLES 1 HOP
+
+address
+rental
+store
+
+SECOND LEVEL TABLES 2 HOP
+
+city
+customer
+inventory
+
+THIRD LEVEL TABLES 3 HOP
+
+country
+film
+
+GRAPH SUMMARY
+
+staff
++-- address
++-- rental
++-- store
+
+============================================
+
+
+============================================
+
+TABLE NAME
+payment
+
+DESCRIPTION
+Stores records for payment. Available columns include payment_id, customer_id, staff_id, rental_id, amount, payment_date.
+
+COLUMNS
+payment_id INTEGER
+customer_id INTEGER
+staff_id INTEGER
+rental_id INTEGER
+amount NUMERIC(5, 2)
+payment_date TIMESTAMP
+
+PRIMARY KEY
+payment_date, payment_id
+
+FOREIGN KEYS
+None
+
+DIRECTLY CONNECTED TABLES 1 HOP
+
+None
+
+SECOND LEVEL TABLES 2 HOP
+
+None
+
+THIRD LEVEL TABLES 3 HOP
+
+None
+
+GRAPH SUMMARY
+
+payment
++-- None
+
+============================================
+
+
+============================================
+
+TABLE NAME
+store
+
+DESCRIPTION
+Stores records for store. Available columns include store_id, manager_staff_id, address_id, last_update.
+
+COLUMNS
+store_id INTEGER
+manager_staff_id INTEGER
+address_id INTEGER
+last_update TIMESTAMP
+
+PRIMARY KEY
+store_id
+
+FOREIGN KEYS
+address_id -> address(address_id)
+
+DIRECTLY CONNECTED TABLES 1 HOP
+
+address
+customer
+inventory
+staff
+
+SECOND LEVEL TABLES 2 HOP
+
+city
+film
+rental
+
+THIRD LEVEL TABLES 3 HOP
+
+country
+film_actor
+film_category
+language
+
+GRAPH SUMMARY
+
+store
++-- address
++-- customer
++-- inventory
++-- staff
+
+============================================
+
+

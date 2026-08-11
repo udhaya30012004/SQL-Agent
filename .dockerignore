@@ -1,0 +1,11 @@
+.git
+.pytest_cache
+venv
+**/__pycache__
+**/*.pyc
+.env
+*.db
+SQL_Agent/artifacts
+frontend/node_modules
+frontend/dist
+frontend/.vite

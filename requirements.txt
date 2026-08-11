@@ -1,0 +1,15 @@
+pandas 
+numpy
+langchain
+langgraph
+langchain-groq
+langchain-ollama
+python-dotenv
+SQLAlchemy
+psycopg2-binary
+pinecone
+google-cloud-aiplatform
+google-genai
+plotly
+pydantic
+bcrypt>=4.0.1,<4.1

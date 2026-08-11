@@ -1,0 +1,32 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: sqlite:////app/data/agent_backend.db
+      CHARTS_DIR: /app/SQL_Agent/artifacts/charts
+      BACKEND_CORS_ORIGINS: '["http://localhost:3000"]'
+    volumes:
+      - backend_data:/app/data
+      - chart_artifacts:/app/SQL_Agent/artifacts/charts
+    expose:
+      - "8000"
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  backend_data:
+  chart_artifacts:

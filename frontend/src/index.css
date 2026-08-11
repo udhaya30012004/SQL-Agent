@@ -1,0 +1,409 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    /* === NEW SPACE COLOR PALETTE === */
+    --bg-deep: #030014;
+    --bg-surface: #0A0A1A;
+    --bg-elevated: #111127;
+    --bg-hover: #1A1A3E;
+    --accent-violet: #8B5CF6;
+    --accent-cyan: #22D3EE;
+    --accent-emerald: #34D399;
+    --accent-rose: #F43F5E;
+    --text-primary: #F8FAFC;
+    --text-secondary: #94A3B8;
+    --text-muted: #64748B;
+
+    /* shadcn compat tokens */
+    --background: 240 60% 3%;
+    --foreground: 210 40% 98%;
+    --card: 240 50% 5%;
+    --card-foreground: 210 40% 98%;
+    --popover: 240 50% 5%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 263 70% 66%;
+    --primary-foreground: 240 6% 10%;
+    --secondary: 240 20% 12%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 240 20% 12%;
+    --muted-foreground: 215 20% 55%;
+    --accent: 240 20% 12%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 350 89% 60%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 240 20% 13%;
+    --input: 240 20% 13%;
+    --ring: 263 70% 66%;
+    --radius: 0.75rem;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--bg-deep);
+    color: var(--text-primary);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+  }
+}
+
+/* ============================================
+   PREMIUM GRADIENT SCROLLBAR
+   ============================================ */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-deep);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--accent-violet), var(--accent-cyan));
+  border-radius: 9999px;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #a78bfa, #67e8f9);
+  box-shadow: 0 0 8px rgba(139, 92, 246, 0.4);
+}
+
+/* ============================================
+   GLASSMORPHISM PANELS
+   ============================================ */
+.glass-panel {
+  background: rgba(10, 10, 26, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(139, 92, 246, 0.1);
+}
+
+.glass-panel-glow {
+  background: rgba(10, 10, 26, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  box-shadow: 0 0 30px -5px rgba(139, 92, 246, 0.12),
+              0 0 60px -10px rgba(34, 211, 238, 0.08);
+}
+
+/* ============================================
+   ANIMATED BACKGROUND ORBS
+   ============================================ */
+.bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.15;
+  pointer-events: none;
+  will-change: transform;
+}
+.bg-orb-violet {
+  background: radial-gradient(circle, #8B5CF6, transparent 70%);
+  animation: float-orb 20s ease-in-out infinite;
+}
+.bg-orb-cyan {
+  background: radial-gradient(circle, #22D3EE, transparent 70%);
+  animation: float-orb 25s ease-in-out infinite reverse;
+}
+.bg-orb-emerald {
+  background: radial-gradient(circle, #34D399, transparent 70%);
+  animation: float-orb 30s ease-in-out infinite;
+}
+
+@keyframes float-orb {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(30px, -40px) scale(1.1); }
+  50% { transform: translate(-20px, 20px) scale(0.9); }
+  75% { transform: translate(15px, 35px) scale(1.05); }
+}
+
+/* ============================================
+   DOT GRID BACKGROUND PATTERN
+   ============================================ */
+.dot-grid-bg {
+  position: relative;
+}
+.dot-grid-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at 1px 1px, rgba(139, 92, 246, 0.08) 1px, transparent 0);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ============================================
+   GLITTER / SPARKLE PARTICLE EFFECTS
+   ============================================ */
+.glitter-container {
+  position: relative;
+  overflow: hidden;
+}
+.glitter-container::before,
+.glitter-container::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+.glitter-container::before {
+  background-image:
+    radial-gradient(1.5px 1.5px at 10% 20%, rgba(139, 92, 246, 0.8) 50%, transparent 50%),
+    radial-gradient(1px 1px at 30% 60%, rgba(34, 211, 238, 0.7) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 50% 10%, rgba(52, 211, 153, 0.6) 50%, transparent 50%),
+    radial-gradient(1px 1px at 70% 80%, rgba(139, 92, 246, 0.7) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 90% 40%, rgba(34, 211, 238, 0.8) 50%, transparent 50%),
+    radial-gradient(1px 1px at 15% 90%, rgba(52, 211, 153, 0.5) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 60% 45%, rgba(139, 92, 246, 0.6) 50%, transparent 50%),
+    radial-gradient(1px 1px at 85% 15%, rgba(34, 211, 238, 0.7) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 40% 75%, rgba(167, 139, 250, 0.5) 50%, transparent 50%),
+    radial-gradient(1px 1px at 25% 35%, rgba(103, 232, 249, 0.6) 50%, transparent 50%);
+  animation: sparkle-drift 8s ease-in-out infinite;
+}
+.glitter-container::after {
+  background-image:
+    radial-gradient(1px 1px at 20% 50%, rgba(255, 255, 255, 0.5) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 45% 25%, rgba(255, 255, 255, 0.3) 50%, transparent 50%),
+    radial-gradient(1px 1px at 75% 70%, rgba(255, 255, 255, 0.4) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 55% 85%, rgba(255, 255, 255, 0.3) 50%, transparent 50%),
+    radial-gradient(1px 1px at 35% 15%, rgba(255, 255, 255, 0.5) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 80% 55%, rgba(255, 255, 255, 0.3) 50%, transparent 50%);
+  animation: sparkle-drift 12s ease-in-out infinite reverse;
+}
+
+@keyframes sparkle-drift {
+  0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
+  25% { transform: translateY(-8px) rotate(1deg); opacity: 1; }
+  50% { transform: translateY(3px) rotate(-0.5deg); opacity: 0.7; }
+  75% { transform: translateY(-5px) rotate(0.5deg); opacity: 0.9; }
+}
+
+/* ============================================
+   NEON GLOW UTILITY CLASSES
+   ============================================ */
+.glow-violet {
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.3),
+              0 0 45px rgba(139, 92, 246, 0.1);
+}
+.glow-cyan {
+  box-shadow: 0 0 15px rgba(34, 211, 238, 0.3),
+              0 0 45px rgba(34, 211, 238, 0.1);
+}
+.glow-emerald {
+  box-shadow: 0 0 15px rgba(52, 211, 153, 0.3),
+              0 0 45px rgba(52, 211, 153, 0.1);
+}
+.glow-rose {
+  box-shadow: 0 0 15px rgba(244, 63, 94, 0.3),
+              0 0 45px rgba(244, 63, 94, 0.1);
+}
+
+/* ============================================
+   ANIMATED GRADIENT BORDER
+   ============================================ */
+.gradient-border {
+  position: relative;
+  border: none !important;
+}
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--border-angle, 0deg),
+    var(--accent-violet),
+    var(--accent-cyan),
+    var(--accent-emerald),
+    var(--accent-violet)
+  );
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+  animation: border-spin 4s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes border-spin {
+  to { --border-angle: 360deg; }
+}
+
+@property --border-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* ============================================
+   SHIMMER SWEEP EFFECT (UPGRADED)
+   ============================================ */
+@keyframes shimmer-sweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.shimmer-effect {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer-effect::after {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(139, 92, 246, 0.06) 20%,
+    rgba(34, 211, 238, 0.12) 50%,
+    rgba(139, 92, 246, 0.06) 80%,
+    rgba(255, 255, 255, 0)
+  );
+  animation: shimmer-sweep 2.5s ease-in-out infinite;
+  content: '';
+  pointer-events: none;
+}
+
+/* ============================================
+   BUTTON GLOW PULSE
+   ============================================ */
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.3),
+                0 0 30px rgba(139, 92, 246, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(139, 92, 246, 0.5),
+                0 0 50px rgba(34, 211, 238, 0.2);
+  }
+}
+
+.btn-glow-pulse {
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+/* ============================================
+   STATUS DOT MULTI-RING PULSE
+   ============================================ */
+@keyframes ring-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.5);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(52, 211, 153, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(52, 211, 153, 0);
+  }
+}
+
+.status-dot-pulse {
+  animation: ring-pulse 2s ease-out infinite;
+}
+
+/* ============================================
+   FADE-IN-UP ANIMATION
+   ============================================ */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out both;
+}
+
+/* Stagger children with delay */
+.stagger-children > *:nth-child(1) { animation-delay: 0.05s; }
+.stagger-children > *:nth-child(2) { animation-delay: 0.1s; }
+.stagger-children > *:nth-child(3) { animation-delay: 0.15s; }
+.stagger-children > *:nth-child(4) { animation-delay: 0.2s; }
+.stagger-children > *:nth-child(5) { animation-delay: 0.25s; }
+.stagger-children > *:nth-child(6) { animation-delay: 0.3s; }
+
+/* ============================================
+   GRADIENT TEXT UTILITY
+   ============================================ */
+.text-gradient-violet-cyan {
+  background: linear-gradient(135deg, #a78bfa, #8B5CF6, #22D3EE, #34D399);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-glow {
+  background: linear-gradient(135deg, #c4b5fd, #a78bfa, #67e8f9);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 12px rgba(139, 92, 246, 0.4));
+}
+
+/* ============================================
+   HOVER CARD LIFT
+   ============================================ */
+.hover-lift {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.3s ease;
+}
+.hover-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px -12px rgba(139, 92, 246, 0.2),
+              0 0 20px rgba(34, 211, 238, 0.08);
+}
+
+/* ============================================
+   BREATHING GLOW ANIMATION
+   ============================================ */
+@keyframes breathe-glow {
+  0%, 100% { opacity: 0.5; filter: drop-shadow(0 0 6px rgba(139, 92, 246, 0.3)); }
+  50% { opacity: 1; filter: drop-shadow(0 0 14px rgba(139, 92, 246, 0.6)); }
+}
+
+.animate-breathe {
+  animation: breathe-glow 3s ease-in-out infinite;
+}
+
+/* ============================================
+   SPINNING CONIC GRADIENT (for avatar rings)
+   ============================================ */
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+
+.avatar-ring-spin {
+  position: relative;
+}
+.avatar-ring-spin::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--accent-violet),
+    var(--accent-cyan),
+    var(--accent-emerald),
+    var(--accent-violet)
+  );
+  animation: spin-slow 4s linear infinite;
+  z-index: -1;
+}
