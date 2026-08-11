@@ -25,8 +25,9 @@ from api.app.db.session import engine, Base
 # Import ALL models so SQLAlchemy knows about them at table-creation time
 from api.app.models.user import User          # noqa: F401
 from api.app.models.chat import ChatSession, ChatMessage  # noqa: F401
+from api.app.models.connector import Connector, ConnectorConnection  # noqa: F401
 
-from api.app.routers import auth, chat, sql_agent, pandas_agent
+from api.app.routers import auth, chat, connectors, sql_agent, pandas_agent
 
 
 @asynccontextmanager
@@ -83,6 +84,7 @@ app.mount(
 # ==========================================
 app.include_router(auth.router, prefix=settings.API_V1_STR)
 app.include_router(chat.router, prefix=settings.API_V1_STR)
+app.include_router(connectors.router, prefix=settings.API_V1_STR)
 app.include_router(sql_agent.router, prefix=settings.API_V1_STR)
 app.include_router(pandas_agent.router, prefix=settings.API_V1_STR)
 

@@ -177,6 +177,7 @@ async def ask_agent(
                 question=payload.question,
                 connection_string=payload.connection_string,
                 response_mode=payload.response_mode,
+                user_id=current_user.id,
             )
 
             # Format answers and artifacts from state

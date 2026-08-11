@@ -13,3 +13,4 @@ google-genai
 plotly
 pydantic
 bcrypt>=4.0.1,<4.1
+websockets>=12.0

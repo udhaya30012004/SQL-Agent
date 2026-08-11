@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
-import { Database, CheckCircle2, AlertCircle, RefreshCw } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Database, CheckCircle2, AlertCircle, RefreshCw, PlugZap, Copy } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../ui/card';
-import { sqlApi } from '../../api/sqlApi';
+import { connectorApi } from '../../api/connectorApi';
+import { BACKEND_ORIGIN } from '../../api/config';
+import { ConnectorStatusResponse, PairingCodeResponse } from '../../types/connector';
 
 interface ConnectionFormProps {
   onConnectionVerified: (connectionString: string) => void;
@@ -21,6 +23,35 @@ export const ConnectionForm: React.FC<ConnectionFormProps> = ({
     type: 'success' | 'error' | null;
     message: string;
   }>({ type: null, message: '' });
+  const [connectorStatus, setConnectorStatus] = useState<ConnectorStatusResponse>({
+    status: 'offline',
+  });
+  const [pairing, setPairing] = useState<PairingCodeResponse | null>(null);
+
+  const connectorCommand = pairing
+    ? `python local_connector/connector.py start --backend ${BACKEND_ORIGIN} --pairing-code ${pairing.pairing_code}`
+    : '';
+
+  const refreshConnectorStatus = async () => {
+    try {
+      const res = await connectorApi.getStatus();
+      setConnectorStatus(res);
+    } catch {
+      setConnectorStatus({ status: 'offline' });
+    }
+  };
+
+  const createPairingCode = async () => {
+    const res = await connectorApi.createPairingCode();
+    setPairing(res);
+    await refreshConnectorStatus();
+  };
+
+  useEffect(() => {
+    refreshConnectorStatus();
+    const intervalId = window.setInterval(refreshConnectorStatus, 5000);
+    return () => window.clearInterval(intervalId);
+  }, []);
 
   const handleTestConnection = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -28,9 +59,11 @@ export const ConnectionForm: React.FC<ConnectionFormProps> = ({
     setStatus({ type: null, message: '' });
 
     try {
-      const res = await sqlApi.testConnection({
-        connection_string: connString,
-      });
+      if (connectorStatus.status !== 'online') {
+        throw new Error('Local connector is offline. Start the connector before testing this database.');
+      }
+
+      const res = await connectorApi.testConnection(connString);
       setStatus({
         type: 'success',
         message: res.message || 'Database connection verified successfully!',
@@ -65,6 +98,49 @@ export const ConnectionForm: React.FC<ConnectionFormProps> = ({
       </CardHeader>
 
       <CardContent className="space-y-4">
+        <div className="rounded-xl border border-white/[0.08] bg-space-deep/70 p-4 space-y-3">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-3">
+              <PlugZap className="w-4 h-4 text-violet-400" />
+              <div>
+                <p className="text-xs font-semibold text-slate-200">Local Connector</p>
+                <p className="text-[11px] text-slate-500">
+                  Status: <span className={connectorStatus.status === 'online' ? 'text-emerald-300' : 'text-amber-300'}>{connectorStatus.status}</span>
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button type="button" variant="ghost" size="sm" onClick={refreshConnectorStatus}>
+                Check
+              </Button>
+              <Button type="button" size="sm" onClick={createPairingCode}>
+                Pair Connector
+              </Button>
+            </div>
+          </div>
+
+          {pairing && connectorStatus.status !== 'online' && (
+            <div className="space-y-2">
+              <p className="text-[11px] text-slate-400">
+                Run this command from the project root on the machine that can reach your database.
+              </p>
+              <div className="flex items-center gap-2 rounded-lg bg-black/30 border border-white/[0.06] p-2">
+                <code className="text-[11px] text-violet-200 font-mono break-all flex-1">
+                  {connectorCommand}
+                </code>
+                <button
+                  type="button"
+                  onClick={() => navigator.clipboard.writeText(connectorCommand)}
+                  className="p-1.5 rounded-md text-slate-400 hover:text-white hover:bg-white/5"
+                  title="Copy command"
+                >
+                  <Copy className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
         <form onSubmit={handleTestConnection} className="space-y-4">
           <Input
             label="Connection String (SQLAlchemy Format)"

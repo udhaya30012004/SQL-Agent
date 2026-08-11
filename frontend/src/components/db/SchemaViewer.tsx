@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Key, Link2, Search, Layers, ChevronDown, ChevronUp } from 'lucide-react';
 import { DatabaseSchemaResponse, TableSchema } from '../../types/sql';
-import { sqlApi } from '../../api/sqlApi';
+import { connectorApi } from '../../api/connectorApi';
 import { StateWrapper } from '../common/StateWrapper';
 import { Badge } from '../ui/badge';
 
@@ -22,7 +22,7 @@ export const SchemaViewer: React.FC<SchemaViewerProps> = ({ connectionString }) 
     setIsError(false);
     setError(null);
     try {
-      const res = await sqlApi.getSchema({ connection_string: connectionString });
+      const res = await connectorApi.getSchema(connectionString);
       setData(res);
       // Auto-expand first 2 tables
       if (res.schema) {
